@@ -202,7 +202,7 @@ public class FibonacciFunctionTest {
 
 
 
-:eigth: Use GraalVM SDK as your IDE Java and Test your function using Maven 
+:eight: Use GraalVM SDK as your IDE Java and Test your function using Maven 
 
 ```shell 
 $ sdk use java 22.0.0-ee11
