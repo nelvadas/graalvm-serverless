@@ -214,8 +214,13 @@ Java(TM) SE Runtime Environment GraalVM EE 22.0.0 (build 11.0.14+8-LTS-jvmci-22.
 Java HotSpot(TM) 64-Bit Server VM GraalVM EE 22.0.0 (build 11.0.14+8-LTS-jvmci-22.0-b03, mixed mode, sharing)
 ```
 
-Run the unit test with Maven 
-```sh 
+
+
+## Build and deploy the Serverless Application Locaaly 
+
+Run the unit test with Maven
+
+```sh
 $ mvn test
 [INFO] Scanning for projects...
 [INFO] 
@@ -258,7 +263,6 @@ $ mvn test
 [INFO] ------------------------------------------------------------------------
 ```
 
-## Build and deploy the Serverless Application Locaaly 
 
 Before building our function, let us explore and customize the local context
 
