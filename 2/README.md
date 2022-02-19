@@ -18,9 +18,7 @@
 - [Fn Tutorials](https://fnproject.io/tutorials/)
 
 
-In the following lab, we will follow various patterns to optimize our Serverless function with GraalVM 
-
-
+In the following lab, you will use GraalVM EE to initialize and build a Serverless function
 
 
 
@@ -28,7 +26,9 @@ In the following lab, we will follow various patterns to optimize our Serverless
 <img src="../images//noun_SH_File_272740_100.png">
 </div>
 
-## GraalVM EE Container images
+## Prerequisites
+In order to initialize an AOT Fn Function, you need an initialization image;
+By default you can rely on  
 Oracle provides a couple of Initializations images for Fn with GraalVM EE.
 
 
@@ -256,7 +256,7 @@ fibonaccinative nelvadas/fibonaccinative:0.0.2 01FW6W5FAVNG8G00GZJ000000A
 
 ### Invoke the function
 
- Inspect the function to confirm the changes
+ Inspect the function to confirm the details
 
 ```sh
 $ fn inspect function graal-fn-demo fibonaccinative
@@ -275,11 +275,30 @@ $ fn inspect function graal-fn-demo fibonaccinative
  "updated_at": "2022-02-18T16:55:40.635Z"
 }
 ```
+Now invoke the function 
+* with `fn invoke`
 
 ```sh
+$ echo -n '10' | fn invoke graal-fn-demo  fibonaccinative
+55
+```
+
+* With curl 
+```cmd
 $ curl  -X POST --data 8  http://localhost:8080/t/graal-fn-demo/fibonaccinative
 21
 ```
+
+Running container start and Pause/exit so fast that you even dont' have time to capture their logs 
+
+```sh 
+$ docker ps -a
+CONTAINER ID   IMAGE                                  COMMAND                  CREATED         STATUS                      PORTS                                                 NAMES
+bd50b61d6a80   nelvadas/fibonaccinative:0.0.2         "./func -XX:MaximumH…"   6 seconds ago   Up 5 seconds (Paused)                                                             01FW8BBQPHNG8G00GZJ000012X
+```
+
+
+
 
 ### Fn Performance with GraalVM AOT
 

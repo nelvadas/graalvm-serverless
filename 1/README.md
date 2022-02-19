@@ -390,9 +390,17 @@ $ fn inspect function graal-fn-demo fibonacci
 }
 ```
 
-
+### Invoke the function 
+- with `fn invoke`
 
 ```sh
+$ echo -n '10' | fn invoke graal-fn-demo  fibonacci
+55
+```
+
+- With curl: Hit the function's http trigger 
+
+```cmd
 $ curl  -X POST --data 8  http://localhost:8080/t/graal-fn-demo/fibonacci
 21
 ```
