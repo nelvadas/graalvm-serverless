@@ -1,0 +1,9 @@
+[
+  {
+    "name" : "com.example.fn.Fibonaccinative",
+    "methods" : [
+      { "name" : "handleRequest" },
+      { "name" : "<init>" }
+    ]
+  }
+]
