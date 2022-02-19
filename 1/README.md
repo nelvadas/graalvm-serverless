@@ -397,10 +397,110 @@ $ curl  -X POST --data 8  http://localhost:8080/t/graal-fn-demo/fibonacci
 21
 ```
 
+## Fn Performance
+
+Let's run a benchmark on the existing serverless function with `hey`()
+For each function invocation, a docker container is created to serve the request.
+
+Create an Body file for the benchmark; for this we want to get Fibonaci(100)
+
+```sh
+$ echo 100 > data.txt
+$ cat data.txt
+100
+```
+
+Now run 1000 requests with 100 cucurrent calls.
+
+```sh
+$ hey -n 1000 -c 100  -m POST -D data.txt  http://localhost:8080/t/graal-fn-demo/fibonacci
+
+Summary:
+  Total: 32.8704 secs
+  Slowest: 19.9812 secs
+  Fastest: 0.0212 secs
+  Average: 2.1615 secs
+  Requests/sec: 30.4226
+
+  Total data: 1980 bytes
+  Size/request: 2 bytes
+
+Response time histogram:
+  0.021 [1] |
+  2.017 [734] |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  4.013 [68] |■■■■
+  6.009 [47] |■■■
+  8.005 [35] |■■
+  10.001 [24] |■
+  11.997 [18] |■
+  13.993 [9] |
+  15.989 [14] |■
+  17.985 [11] |■
+  19.981 [6] |
 
 
-##
-Next, we'll try to create a Optimize the function with GraalVM Enterprise .
+Latency distribution:
+  10% in 0.1277 secs
+  25% in 0.2228 secs
+  50% in 0.4512 secs
+  75% in 1.7373 secs
+  90% in 7.1375 secs
+  95% in 11.4712 secs
+  99% in 17.8666 secs
+
+Details (average, fastest, slowest):
+  DNS+dialup: 0.0009 secs, 0.0212 secs, 19.9812 secs
+  DNS-lookup: 0.0004 secs, 0.0000 secs, 0.0056 secs
+  req write: 0.0001 secs, 0.0000 secs, 0.0034 secs
+  resp wait: 2.1604 secs, 0.0211 secs, 19.9667 secs
+  resp read: 0.0001 secs, 0.0000 secs, 0.0007 secs
+
+Status code distribution:
+  [200] 966 responses
+  [502] 1 responses
+
+Error distribution:
+  [33] Post "http://localhost:8080/t/graal-fn-demo/fibonacci": context deadline exceeded (Client.Timeout exceeded while awaiting headers)
+
+
+```
+
+
+
+
+Watch the running and exited containers.
+
+```sh 
+$ $ docker ps -a
+CONTAINER ID   IMAGE                                  COMMAND                  CREATED          STATUS                      PORTS                                                 NAMES
+1ff76ca5df5c   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 8 seconds (Paused)                                                             01FVY7SA1VNG8G00GZJ00000CY
+a43a02018f83   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 8 seconds (Paused)                                                             01FVY7SA1VNG8G00GZJ00000CX
+f8fbc1cab450   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 10 seconds                                                                     01FVY7S9VVNG8G00GZJ00000CN
+e3e5a8e25de9   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 10 seconds                                                                     01FVY7SA1TNG8G00GZJ00000CW
+ce6e99e640a8   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 10 seconds                                                                     01FVY7SA1XNG8G00GZJ00000CZ
+47a06f25000e   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 10 seconds                                                                     01FVY7SA1TNG8G00GZJ00000CV
+d32c6ae9737e   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 10 seconds                                                                     01FVY7S9VVNG8G00GZJ00000CQ
+117536ae72c8   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 10 seconds (Paused)                                                            01FVY7S9VWNG8G00GZJ00000CR
+0bd183ee354a   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 9 seconds                                                                      01FVY7S9VJNG8G00GZJ00000CA
+b3244633d25b   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 8 seconds (Paused)                                                             01FVY7S9VVNG8G00GZJ00000CP
+f0af23abf681   nelvadas/fibonacci:0.0.1               "/usr/java/openjdk-1…"   18 seconds ago   Up 9 seconds                                                                      01FVY7S9VQNG8G00GZJ00000CH
+                                                          
+...
+```
+
+In average we can comple `30.42` req/s  with a latency  `~17.87` for 99% of the requests.
+
+
+
+
+## Wrap Up
+
+Congratulations! you just built a Fibonacci serverless function with Fn SDK
+Build the function with Docker and package it in a  container along with a Java Virtual Machine .
+
+
+
+Next, we'll try to create a Optimize the function with GraalVM Enterprise features..
 
 ---
 <a href="../1/">

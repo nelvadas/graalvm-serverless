@@ -9,11 +9,19 @@ This labs is build with the following components
 * Java [Fn SDK](https://github.com/fnproject/fn#top). While writing this lab Fn sdk version is 0.3.749 for server and  0.6.13 for client 
 
 
-## Others Tooling
+## Others Utilities
 In the labs we will using the following utilities as well
 
-*  [Apache Benchmark](https://httpd.apache.org/docs/2.4/programs/ab.html) ab
-*  [ Oracle Cloud Infrastructure CLI](https://github.com/oracle/oci-cli) oci
+* An HTTP Load Generator like [Hey](https://github.com/rakyll/hey) or [Apache Benchmark](https://httpd.apache.org/docs/2.4/programs/ab.html) 
+* A Container Runtime like [Docker](<https://docs.docker.com/get-docker>) or [Podman](https://podman.io/)
+* Thee Ultimate Packer for eXecutables [UPX](https://upx.github.io/)
+* Docker Image Explorer [Dive](https://github.com/wagoodman/dive)
+* Oracle Cloud Infrastructure CLI [oci](https://github.com/oracle/oci-cli)
+
+
+
+## Wrap Up
+Congratulations! your workstation is now up and running with tools required to complete the next lab.
 
 Next, we'll try to create a Simple Java Function.
 
