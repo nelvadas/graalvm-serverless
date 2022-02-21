@@ -192,6 +192,7 @@ $ echo -n "10" | fn -v invoke  graal-fn-demo fibonaccinative
 
 ```
 
+![](../images/fibonaccionOCI.png)
 
 
 ## Wrap Up
