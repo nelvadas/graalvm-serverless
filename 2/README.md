@@ -417,11 +417,16 @@ Error distribution:
 ```
 
 
-### Metrics Comparison Table 
+### Metrics Analysis
 
 
+Latency 
 
-In average we can comple `30.42` req/s  with a latency  `~17.87` for 99% of the requests.
+![](../images/latency.png)
+
+- In average we can handle `30.42` req/s  with a latency  `~17.87` for 99% of the requests with Open JDK (Average: 2.1615 secs )
+- The same function peaks at `117.6393`req/s with a latency `~4.8928` for 99%  of the requests while running with GraalVM Native.(Average: 0.6565 secs)
+
 
 
 
