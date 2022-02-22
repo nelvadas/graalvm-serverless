@@ -81,26 +81,33 @@ time="2022-02-14T21:22:17Z" level=info msg="Fn serving on `:8080`" type=full ver
 
 In another terminal window, Create your first fn Application 
 
-```sh 
-$  mkdir graal-fn-demo
-$ cd graal-fn-demo/
-```
-Now initialize your first Fn application 
 
 ```sh
-$ $ fn create app goapp
+$ fn create app goapp
 ```
 
- 
+ Now initialize your go Fn application
 
 
 ```sh 
 $ fn init --runtime go --trigger http --name fibonaccigo
-
 ```
 The function is created with a couple of files and directories 
+```sh
+$ tree
+.
+├── README.md
+└── fibonaccigo
+    
+    ├── func.go
+    ├── func.yaml
+    └── go.mod
 
-Edit the func.go
+1 directory, 4 files
+```
+
+
+Edit the `func.go` with the following content
 ```go
 package main
 
@@ -142,13 +149,13 @@ func myHandler(ctx context.Context, in io.Reader, out io.Writer) {
 
 
 
-### Build 
 
+## Build and Local Deployment 
 
-Now let's package the fibonacci function
+Deploy the function on the local running server using fn deploy 
 
 ```sh 
-$fn --verbose deploy --app goapp --local
+$ fn --verbose deploy --app goapp --local
 Deploying fibonaccigo to app: goapp
 Bumped to version 0.0.14
 Using Container engine docker
@@ -176,78 +183,47 @@ Current Context:  default
  => exporting to image                                                                                                                                                                    0.0s
  => => exporting layers                                                                                                                                                                   0.0s
  => => writing image sha256:8e578036a446106d23e5872ee1b5d9778b4cec5710095bad14f5c53b184b6a6e                                                                                              0.0s
- => => naming to docker.io/nelvadas/fibonaccigo:0.0.14
-```
+ => => naming to docker.io/nelvadas/fibonaccigo:0.0.14                                                                                                                                    0.0s
 
-The function is build and a new docker image is produced.
-In this Docker image, the application Jar file  is packaged as an additonnal layer of an image containing a Java Runtime Environment  `fnproject/fn-java-fdk:jre11-1.0.145`
+Use 'docker scan' to run Snyk tests against images to find vulnerabilities and learn how to fix them
 
-Navigate through the generated image using the `dive`tool 
-
-```sh
-dive nelvadas/fibonacci:0.0.1
-```
-![](../images/exploreimage1.png)
-
-
-### Local Deployment 
-
-Deploy the function on the local running server using fn deploy 
-
-```sh 
-$ fn deploy --app graal-fn-demo --local --no-bump
-Using Container engine docker
-Building image nelvadas/fibonacci:0.0.1 ..
-Updating function fibonacci using image nelvadas/fibonacci:0.0.1...
-Successfully created function: fibonacci with nelvadas/fibonacci:0.0.1
-Successfully created trigger: fibonacci
-Trigger Endpoint: http://localhost:8080/t/graal-fn-demo/fibonacci
-```
-The no-bump argument assumes external version management .
-
-The functions list of the graal-fn-demo applications is updated with the new function 
-```sh
-$ fn list functions graal-fn-demo
-NAME  IMAGE    ID
-fibonacci nelvadas/fibonacci:0.0.1 01FVX74J8XNG8G00GZJ0000003
+Updating function fibonaccigo using image nelvadas/fibonaccigo:0.0.14...
+Successfully created trigger: fibonaccigo
+Trigger Endpoint: http://localhost:8080/t/goapp/fibonaccigo
 ```
 
 
-### Invoke the function 
+### Inspect the function 
 
 - Inspect 
 ```sh 
-$ fn inspect function graal-fn-demo fibonacci
+$ $ fn inspect function goapp fibonaccigo
 {
  "annotations": {
-  "fnproject.io/fn/invokeEndpoint": "http://localhost:8080/invoke/01FVX74J8XNG8G00GZJ0000003"
+  "fnproject.io/fn/invokeEndpoint": "http://localhost:8080/invoke/01FWH8ARWKNG8G00GZJ0000130"
  },
- "app_id": "01FVX21T29NG8G00GZJ0000002",
- "created_at": "2022-02-14T22:55:00.893Z",
- "id": "01FVX74J8XNG8G00GZJ0000003",
+ "app_id": "01FWH896TYNG8G00GZJ000012Z",
+ "created_at": "2022-02-22T17:40:41.491Z",
+ "id": "01FWH8ARWKNG8G00GZJ0000130",
  "idle_timeout": 30,
- "image": "nelvadas/fibonacci:0.0.1",
+ "image": "nelvadas/fibonaccigo:0.0.14",
  "memory": 128,
- "name": "fibonacci",
+ "name": "fibonaccigo",
  "timeout": 30,
- "updated_at": "2022-02-14T22:55:00.893Z"
+ "updated_at": "2022-02-22T18:16:28.508Z"
 }
 ```
+
 
 ### Invoke the function 
 - with `fn invoke`
 
 ```sh
-$ echo -n '10' | fn invoke graal-fn-demo  fibonacci
-55
+$ $ echo -n '{"input": 8 }' |fn invoke goapp fibonaccigo
+{"input":8,"output":21}
 ```
 
-- With curl: Hit the function's http trigger 
 
-```cmd
-$ curl  -X POST --data 8  http://localhost:8080/t/graal-fn-demo/fibonacci
-21
-```
 
 ## Fn Performance
 
@@ -257,9 +233,9 @@ For each function invocation, a docker container is created to serve the request
 Create an Body file for the benchmark; for this we want to get Fibonaci(100)
 
 ```sh
-$ echo 100 > data.txt
-$ cat data.txt
-100
+$ echo {"input": 8 } > data.json
+$ cat data.json
+{"input": 8 }
 ```
 
 Now run 1000 requests with 100 cucurrent calls.
@@ -327,7 +303,6 @@ Regarding average response time GraalVM Native function outperform the Go functi
     <img src="../images/noun_Next_511450_100.png"
         style="display: inline; height: 6em;" />
 </a>
-
 
 
 
