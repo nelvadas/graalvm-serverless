@@ -18,8 +18,9 @@ In this workshop, developers can access practice labs to build Serverless applic
 * [Creating a simple Serverless Application ](./1/)
 * [Building a simple Serverless Application With GraalVM Native Image](./2/)
 * [Deploying GraalVM Serverless Application on Oracle Cloud Infrastructure](./3/)
-* [Multicloud Deployments with GraalVM and Micronaut- AWS Lambda & OCI Functions ](./4/)
-* [Polyglot Serverless Application](./5/)
+* [Benchmark with Golang ](./4/)
+* [Multicloud Deployments with GraalVM and Micronaut- AWS Lambda & OCI Functions ](./5/)
+* [Polyglot Serverless Application](./6/)
 
 ## More Readings and Workshops
 
